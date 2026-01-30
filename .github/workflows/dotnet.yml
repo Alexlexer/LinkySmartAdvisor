@@ -27,4 +27,4 @@ jobs:
       
     - name: Test
       working-directory: ./Linky.Tests
-      run: dotnet test --configuration Release --no-build --verbosity normal
+      run: dotnet test --no-build --verbosity normal --configuration Release
