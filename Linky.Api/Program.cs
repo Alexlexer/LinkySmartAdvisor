@@ -3,6 +3,9 @@ using Linky.Api.Domain.Infrastructure;
 using Linky.Api.Features.Common;
 using Linky.Api.Features.SyncConsumption;
 
+using Polly;
+using Polly.Extensions.Http;
+
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,6 +19,17 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
+
+var retryPolicy = HttpPolicyExtensions
+    .HandleTransientHttpError()
+    .WaitAndRetryAsync(3, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)));
+
+builder.Services.AddHttpClient<EnedisClient>(client =>
+{
+    client.BaseAddress = new Uri("https://ext.api.enedis.fr/");
+    client.DefaultRequestHeaders.Add("Accept", "application/json");
+})
+.AddPolicyHandler(retryPolicy);
 
 // 3. Настройка Middleware
 if (app.Environment.IsDevelopment())
