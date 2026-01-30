@@ -27,4 +27,8 @@ jobs:
 
     - name: Test
       working-directory: ./Linky.Tests
-      run: dotnet test Linky.Tests.csproj -c Release --no-build --verbosity normal
+      run: |
+        dotnet test Linky.Tests/Linky.Tests.csproj \
+        -c Release \
+        --no-build \
+        --logger "console;verbosity=normal"
