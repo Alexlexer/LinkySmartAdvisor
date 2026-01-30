@@ -20,10 +20,10 @@ jobs:
         include-prerelease: true
 
     - name: Restore
-      run: dotnet restore LinkySmartAdvisor.sln
+      run: dotnet restore LinkySmartAdvisor.slnx
 
     - name: Build
-      run: dotnet build LinkySmartAdvisor.sln -c Release --no-restore
+      run: dotnet build LinkySmartAdvisor.slnx -c Release --no-restore
 
     - name: Test
       working-directory: ./Linky.Tests
