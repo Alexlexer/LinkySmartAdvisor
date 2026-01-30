@@ -21,7 +21,6 @@ jobs:
 
     - name: Build
       run: dotnet build --no-restore --configuration Release
-
-    # Если позже добавим тесты, раскомментируем:
-    # - name: Test
-    #   run: dotnet test --no-build --verbosity normal
+      
+    - name: Test
+      run: dotnet test --no-build --verbosity normal
