@@ -1,3 +1,4 @@
 <Solution>
   <Project Path="Linky.Api/Linky.Api.csproj" />
+  <Project Path="Linky.Tests/Linky.Tests.csproj" />
 </Solution>
