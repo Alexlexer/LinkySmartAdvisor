@@ -2,7 +2,9 @@ name: Build and Test
 
 on:
   pull_request:
-    branches: [ "main" ] # Запускать только при PR в main
+    branches: [ "main" ]
+  push:
+    branches: [ "main" ]
 
 jobs:
   build:
@@ -14,13 +16,14 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: 8.0 # Укажите вашу версию (8.0, 9.0 или 10.0)
+        dotnet-version: '10.0.x'
+        include-prerelease: true
 
-    - name: Restore dependencies
+    - name: Restore
       run: dotnet restore
 
     - name: Build
-      run: dotnet build --no-restore --configuration Release
-      
+      run: dotnet build --configuration Debug --no-restore
+
     - name: Test
-      run: dotnet test --no-build --verbosity normal
+      run: dotnet test Linky.Tests/Linky.Tests.csproj --configuration Debug --verbosity normal
