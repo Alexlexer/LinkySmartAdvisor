@@ -1,4 +1,7 @@
-﻿using Linky.Api.Domain.Infrastructure;
+﻿using Linky.Api.Domain;
+using Linky.Api.Domain.Infrastructure;
+using Linky.Api.Features.Common;
+using Linky.Api.Features.SyncConsumption;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -20,6 +23,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+builder.Services.AddScoped<IManualMapper<EnedisLoadCurveResponse, List<ConsumptionEntry>>, EnedisMapper>();
 
 app.UseHttpsRedirection();
 
