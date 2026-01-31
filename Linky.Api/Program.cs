@@ -1,6 +1,7 @@
 ﻿using Linky.Api.Domain;
 using Linky.Api.Domain.Infrastructure;
 using Linky.Api.Features.Common;
+using Linky.Api.Features.CostAnalysis;
 using Linky.Api.Features.SyncConsumption;
 using Linky.Api.Features.SyncMarketPrices;
 
@@ -42,6 +43,8 @@ builder.Services.AddScoped<IManualMapper<EnedisLoadCurveResponse, List<Consumpti
 
 builder.Services.AddScoped<SyncMarketPricesHandler>();
 
+builder.Services.AddScoped<CostCalculator>();
+
 var app = builder.Build();
 
 // 3. Настройка Middleware
@@ -56,5 +59,6 @@ app.UseHttpsRedirection();
 // Эндпоинты будем регистрировать здесь через методы расширения для каждого слайса
 // Например: app.MapSyncConsumptionEndpoints();
 app.MapSyncMarketPrices();
+app.MapCostAnalysis();
 
 app.Run();
