@@ -2,11 +2,12 @@
 using Linky.Api.Domain.Infrastructure;
 using Linky.Api.Features.Common;
 using Linky.Api.Features.SyncConsumption;
+using Linky.Api.Features.SyncMarketPrices;
+
+using Microsoft.EntityFrameworkCore;
 
 using Polly;
 using Polly.Extensions.Http;
-
-using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,7 +19,6 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-var app = builder.Build();
 
 var retryPolicy = HttpPolicyExtensions
     .HandleTransientHttpError()
@@ -31,14 +31,25 @@ builder.Services.AddHttpClient<EnedisClient>(client =>
 })
 .AddPolicyHandler(retryPolicy);
 
+builder.Services.AddHttpClient<RteClient>(client =>
+{
+    // По умолчанию используем PROD адрес RTE
+    var baseUrl = builder.Configuration["RteApi:BaseUrl"] ?? "https://opendata.rte-france.com";
+    client.BaseAddress = new Uri(baseUrl);
+});
+
+builder.Services.AddScoped<IManualMapper<EnedisLoadCurveResponse, List<ConsumptionEntry>>, EnedisMapper>();
+
+builder.Services.AddScoped<SyncMarketPricesHandler>();
+
+var app = builder.Build();
+
 // 3. Настройка Middleware
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
-builder.Services.AddScoped<IManualMapper<EnedisLoadCurveResponse, List<ConsumptionEntry>>, EnedisMapper>();
 
 app.UseHttpsRedirection();
 
