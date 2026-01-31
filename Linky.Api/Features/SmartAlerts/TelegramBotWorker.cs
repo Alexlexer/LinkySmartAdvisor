@@ -1,5 +1,6 @@
 ﻿using Telegram.Bot;
 using Telegram.Bot.Polling;
+using Telegram.Bot.Types.Enums;
 
 namespace Linky.Api.Features.SmartAlerts;
 
@@ -17,11 +18,11 @@ public class TelegramBotWorker(ITelegramBotClient botClient, IServiceProvider se
                 var svc = scope.ServiceProvider.GetRequiredService<TelegramService>();
                 await svc.HandleUpdateAsync(update);
             },
-            pollingErrorHandler: (client, ex, ct) => {
+            errorHandler: (client, ex, ct) => {
                 logger.LogError(ex, "Ошибка в Telegram Polling");
                 return Task.CompletedTask;
             },
-            receiverOptions: new ReceiverOptions { AllowedUpdates = [] },
+            receiverOptions: new ReceiverOptions { AllowedUpdates = Array.Empty<UpdateType>() },
             cancellationToken: stoppingToken
         );
     }
