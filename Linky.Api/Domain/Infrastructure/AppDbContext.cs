@@ -8,9 +8,18 @@ public class AppDbContext : DbContext
 
     public DbSet<ConsumptionEntry> ConsumptionEntries => Set<ConsumptionEntry>();
 
+    public DbSet<MarketPrice> MarketPrices => Set<MarketPrice>();
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+
+        modelBuilder.Entity<MarketPrice>(builder =>
+        {
+            builder.HasKey(x => x.Id);
+            builder.Property(x => x.PricePerMWh).HasPrecision(18, 4);
+            builder.HasIndex(x => x.Timestamp).IsUnique();
+        });
 
         modelBuilder.Entity<ConsumptionEntry>(builder =>
         {
