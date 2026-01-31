@@ -8,7 +8,7 @@ public class AlertSchedulerWorker(IServiceScopeFactory scopeFactory, ILogger<Ale
         while (!stoppingToken.IsCancellationRequested)
         {
             var now = DateTime.Now;
-            // Целевое время — 15:00
+            // Target time - 15:00
             var scheduledTime = new DateTime(now.Year, now.Month, now.Day, 15, 0, 0);
 
             if (now > scheduledTime)
@@ -17,7 +17,7 @@ public class AlertSchedulerWorker(IServiceScopeFactory scopeFactory, ILogger<Ale
             }
 
             var delay = scheduledTime - now;
-            logger.LogInformation("Следующая проверка цен запланирована на: {Time}", scheduledTime);
+            logger.LogInformation("Next price check scheduled for: {Time}", scheduledTime);
 
             await Task.Delay(delay, stoppingToken);
 
@@ -34,7 +34,7 @@ public class AlertSchedulerWorker(IServiceScopeFactory scopeFactory, ILogger<Ale
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, "Ошибка при выполнении запланированной проверки цен");
+                logger.LogError(ex, "Error executing scheduled price check");
             }
         }
     }

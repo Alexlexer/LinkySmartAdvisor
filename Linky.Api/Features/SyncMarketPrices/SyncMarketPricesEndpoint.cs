@@ -11,7 +11,7 @@ public static class SyncMarketPricesEndpoint
             [FromQuery] DateTime end,
             SyncMarketPricesHandler handler) =>
         {
-            // Небольшая валидация: RTE обычно не отдает данные более чем за 30 дней за раз
+            // Minor validation: RTE usually does not return data for more than 30 days at a time
             if ((end - start).TotalDays > 31)
             {
                 return Results.BadRequest("Period cannot exceed 31 days.");

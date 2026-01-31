@@ -38,13 +38,13 @@ public class MarketPriceTests(IntegrationTestFactory factory) : IClassFixture<In
         var end = DateTime.UtcNow.ToString("o");
 
         // Act
-        // Мы отправляем запрос к нашему новому эндпоинту
+        // We send request to our new endpoint
         var response = await client.PostAsync($"/api/market-prices/sync?start={start}&end={end}", null);
 
         // Assert
-        // Даже если у нас нет реальных ключей RTE, мы проверяем, 
-        // что инфраструктура (Handler, DI, Маршрутизация) работает.
-        // В CI без ключей может быть 500, но локально с ключами должно быть 200.
+        // Even if we don't have real RTE keys, we check
+        // that infrastructure (Handler, DI, Routing) works.
+        // In CI without keys it might be 500, but locally with keys it should be 200.
         Assert.True(response.IsSuccessStatusCode || response.StatusCode == System.Net.HttpStatusCode.InternalServerError);
     }
 

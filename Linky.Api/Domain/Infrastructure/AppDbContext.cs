@@ -25,16 +25,16 @@ public class AppDbContext : DbContext
         {
             builder.HasKey(x => x.Id);
 
-            // Настройки для PRM (Point de Référence Mesure)
+            // Settings for PRM (Point de Référence Mesure)
             builder.Property(x => x.Prm)
                 .IsRequired()
                 .HasMaxLength(14);
 
-            // Настройки точности для денег/мощности
+            // Precision settings for money/power
             builder.Property(x => x.Watts)
                 .HasPrecision(18, 2);
 
-            // Уникальный индекс: нельзя дважды записать данные для одного счетчика на одно и то же время
+            // Unique index: cannot record data twice for the same meter at the same time
             builder.HasIndex(x => new { x.Prm, x.Timestamp }).IsUnique();
         });
     }

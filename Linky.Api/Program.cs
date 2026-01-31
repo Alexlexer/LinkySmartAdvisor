@@ -15,11 +15,11 @@ using Telegram.Bot;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// 1. Подключаем БД (из нашего Пункта 2)
+// 1. Configure DB (from our Step 2)
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// 2. Стандартные инструменты OpenAPI (Swagger)
+// 2. Standard OpenAPI tools (Swagger)
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -37,7 +37,7 @@ builder.Services.AddHttpClient<EnedisClient>(client =>
 
 builder.Services.AddHttpClient<RteClient>(client =>
 {
-    // По умолчанию используем PROD адрес RTE
+    // Default to using RTE PROD address
     var baseUrl = builder.Configuration["RteApi:BaseUrl"] ?? "https://opendata.rte-france.com";
     client.BaseAddress = new Uri(baseUrl);
 });
@@ -62,7 +62,7 @@ builder.Services.AddHostedService<AlertSchedulerWorker>();
 
 var app = builder.Build();
 
-// 3. Настройка Middleware
+// 3. Configure Middleware
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -71,8 +71,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-// Эндпоинты будем регистрировать здесь через методы расширения для каждого слайса
-// Например: app.MapSyncConsumptionEndpoints();
+// Endpoints will be registered here via extension methods for each slice
+// Example: app.MapSyncConsumptionEndpoints();
 app.MapSyncMarketPrices();
 app.MapCostAnalysis();
 

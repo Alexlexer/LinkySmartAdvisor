@@ -6,7 +6,7 @@ namespace Linky.Api.Features.SmartAlerts;
 
 public class TelegramService(ITelegramBotClient botClient, ILogger<TelegramService> logger)
 {
-    // В идеале этот ID нужно сохранить в БД или Config, чтобы не терять при перезагрузке
+    // Ideally this ID should be saved to DB or Config to avoid loss on restart
     private static long? _boundChatId;
 
     public async Task HandleUpdateAsync(Update update)
@@ -18,10 +18,10 @@ public class TelegramService(ITelegramBotClient botClient, ILogger<TelegramServi
         if (messageText == "/start")
         {
             _boundChatId = chatId;
-            logger.LogInformation("Бот успешно привязан к ChatId: {ChatId}", chatId);
+            logger.LogInformation("Bot successfully bound to ChatId: {ChatId}", chatId);
 
             await botClient.SendMessage(chatId,
-                "✅ *Связь установлена!*\n\nЯ запомнил ваш ID. Теперь я буду присылать уведомления о высоких ценах на электричество сюда.",
+                "✅ *Connection established!*\n\nI have saved your ID. Now I will send high electricity price notifications here.",
                 parseMode: ParseMode.Markdown);
         }
     }
@@ -34,7 +34,7 @@ public class TelegramService(ITelegramBotClient botClient, ILogger<TelegramServi
         }
         else
         {
-            logger.LogWarning("Алерт не отправлен: ChatId не определен. Напишите боту /start");
+            logger.LogWarning("Alert not sent: ChatId not defined. Message /start to the bot");
         }
     }
 }
