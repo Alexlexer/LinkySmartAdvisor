@@ -55,5 +55,6 @@ app.UseHttpsRedirection();
 
 // Эндпоинты будем регистрировать здесь через методы расширения для каждого слайса
 // Например: app.MapSyncConsumptionEndpoints();
+app.MapSyncMarketPrices();
 
 app.Run();
