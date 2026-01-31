@@ -2,6 +2,7 @@
 using Linky.Api.Domain.Infrastructure;
 using Linky.Api.Features.Common;
 using Linky.Api.Features.CostAnalysis;
+using Linky.Api.Features.SmartAlerts;
 using Linky.Api.Features.SyncConsumption;
 using Linky.Api.Features.SyncMarketPrices;
 
@@ -44,6 +45,10 @@ builder.Services.AddScoped<IManualMapper<EnedisLoadCurveResponse, List<Consumpti
 builder.Services.AddScoped<SyncMarketPricesHandler>();
 
 builder.Services.AddScoped<CostCalculator>();
+
+builder.Services.AddScoped<AlertService>();
+
+builder.Services.AddHostedService<AlertSchedulerWorker>();
 
 var app = builder.Build();
 
