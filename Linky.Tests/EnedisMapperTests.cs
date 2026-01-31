@@ -16,7 +16,7 @@ public class EnedisMapperTests
     [Fact]
     public void Map_ShouldTransformResponseToEntriesCorrectly()
     {
-        // Arrange (Подготовка данных)
+        // Arrange (Prepare data)
         var response = new EnedisLoadCurveResponse
         {
             MeterReading = new MeterReading
@@ -30,10 +30,10 @@ public class EnedisMapperTests
             }
         };
 
-        // Act (Действие)
+        // Act (Action)
         var result = _mapper.Map(response);
 
-        // Assert (Проверка результата)
+        // Assert (Check result)
         Assert.NotNull(result);
         Assert.Equal(2, result.Count);
         Assert.Equal(1200m, result[0].Watts);
@@ -42,8 +42,8 @@ public class EnedisMapperTests
     }
 
     [Theory]
-    [InlineData("invalid", 0)] // Проверка на некорректную строку
-    [InlineData("", 0)]        // Проверка на пустую строку
+    [InlineData("invalid", 0)] // Check for invalid string
+    [InlineData("", 0)]        // Check for empty string
     public void Map_ShouldHandleInvalidWattsGracefully(string invalidValue, decimal expected)
     {
         // Arrange

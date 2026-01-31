@@ -1,6 +1,6 @@
 ﻿namespace Linky.Api.Features.SyncConsumption;
 
-// Ответ от Enedis (упрощенная структура для начала)
+// Response from Enedis (simplified structure for now)
 public class EnedisLoadCurveResponse
 {
     public MeterReading MeterReading { get; set; } = new();
@@ -14,6 +14,6 @@ public class MeterReading
 
 public class IntervalReading
 {
-    public string Value { get; set; } = string.Empty; // Мощность часто приходит строкой
-    public DateTime Date { get; set; }                // Время замера
+    public string Value { get; set; } = string.Empty; // Power often comes as a string
+    public DateTime Date { get; set; }                // Measurement time
 }

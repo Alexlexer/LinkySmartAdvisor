@@ -3,7 +3,7 @@
 public class MarketPrice
 {
     public Guid Id { get; set; }
-    public DateTime Timestamp { get; set; } // Час, к которому относится цена
-    public decimal PricePerMWh { get; set; } // Цена в Евро за МВтч
+    public DateTime Timestamp { get; set; } // The hour that the price applies to
+    public decimal PricePerMWh { get; set; } // Price in Euros per MWh
     public string Area { get; set; } = "France";
 }

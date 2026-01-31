@@ -6,7 +6,7 @@ namespace Linky.Api.Features.SmartAlerts;
 
 public class AlertService(AppDbContext db)
 {
-    private const decimal HighPriceThreshold = 250.0m; // Порог дорогого электричества
+    private const decimal HighPriceThreshold = 250.0m; // High electricity price threshold
 
     public async Task<List<PriceAlert>> GetPendingAlertsAsync()
     {
@@ -21,7 +21,7 @@ public class AlertService(AppDbContext db)
             p.Timestamp,
             p.PricePerMWh,
             "High",
-            $"Внимание! Завтра в {p.Timestamp:HH:mm} ожидается пиковая цена: {p.PricePerMWh:N2} €/MWh. Рекомендуем снизить потребление."
+            $"Attention! Tomorrow at {p.Timestamp:HH:mm} a peak price is expected: {p.PricePerMWh:N2} €/MWh. We recommend reducing consumption."
         )).ToList();
     }
 }

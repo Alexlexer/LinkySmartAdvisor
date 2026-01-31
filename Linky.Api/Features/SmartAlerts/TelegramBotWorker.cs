@@ -9,7 +9,7 @@ public class TelegramBotWorker(ITelegramBotClient botClient, IServiceProvider se
 {
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        logger.LogInformation("Запуск прослушивания сообщений Telegram...");
+        logger.LogInformation("Starting Telegram message listening...");
 
         await botClient.ReceiveAsync(
             updateHandler: async (client, update, ct) =>
@@ -19,7 +19,7 @@ public class TelegramBotWorker(ITelegramBotClient botClient, IServiceProvider se
                 await svc.HandleUpdateAsync(update);
             },
             errorHandler: (client, ex, ct) => {
-                logger.LogError(ex, "Ошибка в Telegram Polling");
+                logger.LogError(ex, "Error in Telegram Polling");
                 return Task.CompletedTask;
             },
             receiverOptions: new ReceiverOptions { AllowedUpdates = Array.Empty<UpdateType>() },

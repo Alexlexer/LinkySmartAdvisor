@@ -9,16 +9,16 @@ public class SyncMarketPricesHandler(RteClient rteClient, AppDbContext db)
 {
     public async Task HandleAsync(DateTime start, DateTime end)
     {
-        // 1. Получаем данные из API RTE
+        // 1. Get data from RTE API
         var response = await rteClient.GetSpotPricesAsync(start, end);
         if (response?.market_price == null) return;
 
-        // 2. Вытягиваем все интервалы цен
+        // 2. Extract all price intervals
         var priceValues = response.market_price.SelectMany(x => x.values);
 
         foreach (var val in priceValues)
         {
-            // 3. Проверяем, нет ли уже цены на это время (защита от дублей)
+            // 3. Check if price already exists for this time (duplicate protection)
             var exists = await db.MarketPrices
                 .AnyAsync(x => x.Timestamp == val.start_date);
 
@@ -34,7 +34,7 @@ public class SyncMarketPricesHandler(RteClient rteClient, AppDbContext db)
             }
         }
 
-        // 4. Сохраняем всё пачкой
+        // 4. Save everything in a batch
         await db.SaveChangesAsync();
     }
 }

@@ -10,11 +10,11 @@ public static class SmartAlertsEndpoint
 
             if (!alerts.Any())
             {
-                return Results.Ok(new { Message = "Цены в норме, алертов нет." });
+                return Results.Ok(new { Message = "Prices are normal, no alerts." });
             }
 
-            // Здесь в будущем будет отправка в Telegram/Email
-            // А пока возвращаем список найденных аномалий
+            // Future Telegram/Email sending implementation
+            // For now, return list of found anomalies
             return Results.Ok(alerts);
         })
         .WithTags("Alerts")

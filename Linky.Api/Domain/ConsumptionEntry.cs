@@ -4,13 +4,13 @@ public class ConsumptionEntry
 {
     public Guid Id { get; set; }
 
-    // Точное время измерения (Enedis присылает данные каждые 30 мин)
+    // Exact measurement time (Enedis sends data every 30 minutes)
     public DateTime Timestamp { get; set; }
 
-    // Мощность в Ваттах
+    // Power in Watts
     public decimal Watts { get; set; }
 
-    // Идентификатор счетчика (Point de Référence Mesure)
-    // Во Франции это строка из 14 цифр
+    // Meter identifier (Point de Référence Mesure)
+    // In France, this is a 14-digit string
     public string Prm { get; set; } = string.Empty;
 }

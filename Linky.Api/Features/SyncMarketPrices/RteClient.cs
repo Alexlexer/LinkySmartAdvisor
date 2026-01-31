@@ -12,7 +12,7 @@ public class RteClient(HttpClient httpClient, IConfiguration config)
     {
         await EnsureAuthenticatedAsync();
 
-        // Формат ISO8601, который ожидает RTE
+        // ISO8601 format expected by RTE
         var startStr = start.ToString("yyyy-MM-ddTHH:mm:sszzz");
         var endStr = end.ToString("yyyy-MM-ddTHH:mm:sszzz");
 
@@ -23,14 +23,14 @@ public class RteClient(HttpClient httpClient, IConfiguration config)
 
     private async Task EnsureAuthenticatedAsync()
     {
-        // Если токен еще живет (с запасом в 30 секунд), используем его
+        // If token is still valid (with 30 seconds buffer), use it
         if (!string.IsNullOrEmpty(_accessToken) && DateTime.UtcNow < _tokenExpiry.AddSeconds(-30))
             return;
 
         var clientId = config["RteApi:ClientId"];
         var clientSecret = config["RteApi:ClientSecret"];
 
-        // RTE требует Basic Auth для получения токена: Base64(ID:Secret)
+        // RTE requires Basic Auth to get token: Base64(ID:Secret)
         var authHeader = Convert.ToBase64String(Encoding.UTF8.GetBytes($"{clientId}:{clientSecret}"));
 
         var request = new HttpRequestMessage(HttpMethod.Post, "/token/oauth/");
@@ -44,7 +44,7 @@ public class RteClient(HttpClient httpClient, IConfiguration config)
         _accessToken = tokenData?.access_token ?? throw new Exception("Failed to get RTE token");
         _tokenExpiry = DateTime.UtcNow.AddSeconds(tokenData.expires_in);
 
-        // Устанавливаем Bearer токен для основного API
+        // Set Bearer token for main API
         httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _accessToken);
     }
 }

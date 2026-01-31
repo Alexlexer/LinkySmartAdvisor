@@ -18,7 +18,7 @@ public class SmartAlertTests(IntegrationTestFactory factory) : IClassFixture<Int
 
         var tomorrow = DateTime.UtcNow.Date.AddDays(1);
 
-        // 1. Добавляем "дорогую" цену (300 €/MWh > 250)
+        // 1. Add "expensive" price (300 €/MWh > 250)
         db.MarketPrices.Add(new MarketPrice
         {
             Timestamp = tomorrow.AddHours(18),
@@ -26,7 +26,7 @@ public class SmartAlertTests(IntegrationTestFactory factory) : IClassFixture<Int
             Area = "France"
         });
 
-        // 2. Добавляем "нормальную" цену (100 €/MWh < 250)
+        // 2. Add "normal" price (100 €/MWh < 250)
         db.MarketPrices.Add(new MarketPrice
         {
             Timestamp = tomorrow.AddHours(10),
@@ -41,15 +41,15 @@ public class SmartAlertTests(IntegrationTestFactory factory) : IClassFixture<Int
         var alerts = await alertService.GetPendingAlertsAsync();
 
         // Assert
-        Assert.Single(alerts); // Должен быть только один алерт
+        Assert.Single(alerts); // Should be only one alert
         Assert.Equal(300m, alerts[0].PricePerMWh);
-        Assert.Contains("Внимание!", alerts[0].Message);
+        Assert.Contains("Attention!", alerts[0].Message);
     }
 
     [Fact]
     public void AlertWorker_Should_Be_Registered_And_Running()
     {
-        // Проверяем, что HostedService зарегистрирован в системе
+        // Check that HostedService is registered in the system
         var worker = factory.Services.GetServices<IHostedService>()
             .FirstOrDefault(s => s is AlertSchedulerWorker);
 

@@ -13,27 +13,27 @@ public class CostAnalysisTests(IntegrationTestFactory factory) : IClassFixture<I
     [Fact]
     public async Task Should_Calculate_Daily_Cost_Correctly()
     {
-        // 1. Подготовка данных (Arrange)
+        // 1. Prepare data (Arrange)
         using var scope = factory.Services.CreateScope();
         var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
 
         var testDate = new DateTime(2026, 01, 30, 10, 0, 0, DateTimeKind.Utc);
         var prm = "123456789";
 
-        // Добавляем 1 кВт (1000 Вт) потребления
+        // Add 1 kW (1000 W) of consumption
         db.ConsumptionEntries.Add(new ConsumptionEntry { Prm = prm, Timestamp = testDate, Watts = 1000 });
 
-        // Добавляем цену 200 €/MWh (это 0.20 €/kWh)
+        // Add price 200 €/MWh (this is 0.20 €/kWh)
         db.MarketPrices.Add(new MarketPrice { Timestamp = testDate, PricePerMWh = 200m, Area = "France" });
 
         await db.SaveChangesAsync();
 
         var client = factory.CreateClient();
 
-        // 2. Действие (Act)
+        // 2. Action (Act)
         var response = await client.GetAsync($"/api/analysis/daily?prm={prm}&date={testDate:yyyy-MM-dd}");
 
-        // 3. Проверка (Assert)
+        // 3. Check (Assert)
         response.EnsureSuccessStatusCode();
         var report = await response.Content.ReadFromJsonAsync<DailyCostReport>();
 

@@ -12,7 +12,7 @@ public class EnedisMapper : IManualMapper<EnedisLoadCurveResponse, List<Consumpt
             Id = Guid.NewGuid(),
             Prm = source.MeterReading.UsagePointId,
             Timestamp = reading.Date,
-            // Безопасный парсинг строки в decimal
+            // Safe parsing of string to decimal
             Watts = decimal.TryParse(reading.Value, out var watts) ? watts : 0
         }).ToList();
     }
